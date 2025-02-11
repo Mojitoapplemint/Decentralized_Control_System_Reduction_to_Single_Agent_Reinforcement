@@ -4,7 +4,6 @@ import pandas as pd
 import cam_env_cat_entry
 import cam_env_5050_entry
 
-
 STATES = {(1,3):0,
           (1,4):1,
           (1,5):2,
