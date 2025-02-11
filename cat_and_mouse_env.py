@@ -123,14 +123,14 @@ class CatAndMouseEnv(gym.Env):
         
         self.cat_move()
         if self.render_mode == "human":
-            self.render2()
+            self.render2("Cat")
         if self.cat_position == 3 and self.mouse_position==3:
             reward = -100
             terminated = True
         else:
             self.mouse_move()
             if self.render_mode == "human":
-                self.render2()
+                self.render2("Mouse")
             
             if self.cat_position == 3 and self.mouse_position==3:
                 reward = -100
@@ -177,7 +177,7 @@ class CatAndMouseEnv(gym.Env):
     |   {grid[1]}   |       |   {grid[4]}   |")
         
     
-    def render2(self):
+    def render2(self, cat_or_mouse):
         """
         Render the environment.
         """
@@ -198,10 +198,10 @@ class CatAndMouseEnv(gym.Env):
             if self.doors[door_list[i]] == 0:
                 doors[i] = "X"
         
-        print(doors)
-        
         time.sleep(1)
         clear_output(wait=True)
+        
+        print(f"{cat_or_mouse}'s Move")
         print(f"\
     _________________________\n\
     |   1   |       |   4   |\n\
@@ -211,6 +211,7 @@ class CatAndMouseEnv(gym.Env):
     |   2   |   {grid[5]}   |   5   |\n\
     |   {grid[1]}   {doors[2]}       {doors[4]}   {grid[4]}   |\n\
     |       |       |       |               ")
+        print(doors)
         
 # self.mouse_move()
 #         if self.render_mode == "human":
