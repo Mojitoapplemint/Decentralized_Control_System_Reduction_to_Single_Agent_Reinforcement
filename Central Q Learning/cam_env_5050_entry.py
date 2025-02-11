@@ -124,14 +124,14 @@ class CatAndMouseEnv(gym.Env):
         if np.random.rand() < 0.5:
             self.cat_move()
             if self.render_mode == "human":
-                self.render2("Cat")
+                self.render("Cat")
             if self.cat_position == 3 and self.mouse_position==3:
                 reward = -100
                 terminated = True
             else:
                 self.mouse_move()
                 if self.render_mode == "human":
-                    self.render2("Mouse")
+                    self.render("Mouse")
                 
                 if self.cat_position == 3 and self.mouse_position==3:
                     reward = -100
@@ -148,14 +148,14 @@ class CatAndMouseEnv(gym.Env):
         else:
             self.mouse_move()
             if self.render_mode == "human":
-                self.render2("Mouse")
+                self.render("Mouse")
             if self.cat_position == 3 and self.mouse_position==3:
                 reward = -100
                 terminated = True
             else:
                 self.cat_move()
                 if self.render_mode == "human":
-                    self.render2("Cat")
+                    self.render("Cat")
                 
                 if self.cat_position == 3 and self.mouse_position==3:
                     reward = -100
@@ -177,32 +177,8 @@ class CatAndMouseEnv(gym.Env):
         observation = (self.mouse_position, self.cat_position)
         
         return observation, reward, terminated, truncated, info
-        
-
-    def render(self):
-        """
-        Render the environment.
-        """
-        cat = self.cat_position-1
-        mouse = self.mouse_position-1
-        if self.cat_position == 3:
-            cat=5
-
-        grid = [" " for _ in range(6)]
-        grid[cat] = "C"
-        grid[mouse] = "M"
-        time.sleep(1)
-        clear_output(wait=True)
-        print(f"\
-    _________________________\n\
-    |   1   |       |   4   |\n\
-    |   {grid[0]}   |   3   |   {grid[3]}   |\n\
-    ---------   {grid[2]}   ---------\n\
-    |   2   |   {grid[5]}   |   5   |\n\
-    |   {grid[1]}   |       |   {grid[4]}   |")
-        
     
-    def render2(self, cat_or_mouse):
+    def render(self, cat_or_mouse):
         """
         Render the environment.
         """
