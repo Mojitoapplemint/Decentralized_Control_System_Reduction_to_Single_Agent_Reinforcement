@@ -108,6 +108,9 @@ class CatAndMouseEnv(gym.Env):
         
         self.training_count = 0;
         
+        if self.render_mode == "human":
+            self.render("")
+        
         info = {"doors": (1, 1)}
         observation = (self.mouse_position, self.cat_position)
         return observation, info
