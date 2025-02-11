@@ -1,0 +1,108 @@
+import gymnasium as gym
+import numpy as np
+import pandas as pd
+import cat_and_mouse_env
+
+
+STATES = {(1,3):0,
+          (1,4):1,
+          (1,5):2,
+          (2,3):3,
+          (2,4):4,
+          (2,5):5,
+          (3,3):6,
+          (3,4):7,
+          (3,5):8}
+
+def get_joint_action(q_table, state, epsilon):
+    if np.random.rand() < epsilon:
+        action = np.random.choice(4)
+    else:
+        action = np.argmax(q_table[state])
+    return action
+
+def get_state_number(observation, doors):
+    state_num = STATES[observation]
+    
+    door_status_decimal = 2*doors[0]+doors[1]
+    
+    return 4*state_num+door_status_decimal
+
+def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0.9, alpha = 0.9):
+
+    q_table = np.zeros(shape=(36,4))
+
+    terminated_count = [0,0,0,0,0]
+    truncated_count = [0,0,0,0,0]
+
+    for episode in range(epochs):
+        if (episode%100==0):
+            print(str(100*episode/epochs)+"%","done" , end="\r")
+
+        terminated = False
+        truncated = False
+        
+        observation, info = env.reset()
+        doors = info["doors"]
+        
+        new_state = get_state_number(observation, doors)
+        
+        while (not terminated and not truncated):
+        
+            action = get_joint_action(q_table, new_state , epsilon)
+            
+            joint_action = (action//2, action%2)
+            
+            old_state = new_state
+            
+            observation, reward, terminated, truncated, info = env.step(joint_action)
+            
+            doors = info["doors"]
+            
+            new_state = get_state_number(observation, doors)
+            
+            q_table[old_state, action] = q_table[old_state, action] + alpha*(reward + gamma*np.max(q_table[new_state]) - q_table[old_state, action])
+
+        if episode < epochs/5:
+            if terminated:
+                terminated_count[0] += 1
+            else:
+                truncated_count[0] += 1
+        elif episode < 2*epochs/5:
+            if terminated:
+                terminated_count[1] += 1
+            else:
+                truncated_count[1] += 1
+        elif episode < 3*epochs/5:
+            if terminated:
+                terminated_count[2] += 1
+            else:
+                truncated_count[2] += 1
+        elif episode < 4*epochs/5:
+            if terminated:
+                terminated_count[3] += 1
+            else:
+                truncated_count[3] += 1
+        else:
+            if terminated:
+                terminated_count[4] += 1
+            else:
+                truncated_count[4] += 1
+    
+    print("Terminated counts")
+    for i in range(5):
+        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", terminated_count[i])
+        
+    print("Truncated counts")
+    for i in range(5):
+        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", truncated_count[i])
+    
+    df = pd.DataFrame(q_table)
+    df.to_csv(f"{model_name}.csv")
+
+
+#--- Central Q Learning ---#
+env = gym.make("CatAndMouse-v0")
+
+central_q_training(env, "cat_entry", epochs=100000)
+
