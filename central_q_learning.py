@@ -1,7 +1,8 @@
 import gymnasium as gym
 import numpy as np
 import pandas as pd
-import cat_and_mouse_env
+import cam_env_cat_entry
+import cam_env_5050_entry
 
 
 STATES = {(1,3):0,
@@ -102,7 +103,10 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
 
 
 #--- Central Q Learning ---#
-env = gym.make("CatAndMouse-v0")
+env = gym.make("CatAndMouse-cat_entry")
 
-central_q_training(env, "cat_entry", epochs=100000)
+central_q_training(env, "cat_entry", epochs=10000)
 
+env = gym.make("CatAndMouse-5050_entry")
+
+central_q_training(env, "5050_entry", epochs=10000)

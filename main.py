@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import gymnasium as gym
-import cat_and_mouse_env
+import cam_env_cat_entry
 
 
 STATES = {(1,3):0,
