@@ -14,24 +14,6 @@ STATES = {(1,3):0,
           (3,4):7,
           (3,5):8}
 
-MOUSE_STATES = {
-        (1,3):0,
-        (1,4):1, (1,5):1,
-        (2,3):2,
-        (2,4):3, (2,5):3,
-        (3,3):4,
-        (3,4):5, (3,5):5
-    }
-
-CAT_STATES = {
-        (1,3):0, (2,3):0,
-        (1,4):1, (2,4):1, 
-        (1,5):2, (2,5):2, 
-        (3,3):3,
-        (3,4):4, 
-        (3,5):5
-    }
-
 def get_joint_action(q_table, state, epsilon):
     if np.random.rand() < epsilon:
         action = np.random.choice(4)
