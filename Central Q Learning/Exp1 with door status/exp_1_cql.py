@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Central Q Learning")
+
 import gymnasium as gym
 import numpy as np
 import pandas as pd
@@ -24,11 +27,13 @@ def get_joint_action(q_table, state, epsilon):
 def get_state_number(observation, doors):
     state_num = STATES[observation]
     
-    return state_num
+    door_status_decimal = 2*doors[0]+doors[1]
+    
+    return 4*state_num+door_status_decimal
 
 def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0.9, alpha = 0.9):
 
-    q_table = np.zeros(shape=(9,4))
+    q_table = np.zeros(shape=(36,4))
 
     terminated_count = [0,0,0,0,0]
     truncated_count = [0,0,0,0,0]
@@ -95,15 +100,16 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
     for i in range(5):
         print(i*epochs/5,"~",(i+1)*epochs/5 , ":", truncated_count[i])
     
+    
     df = pd.DataFrame(q_table)
-    df.to_csv(f"{model_name}.csv")
+    df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Central Q Learning/Exp1 with door status/{model_name}.csv")
 
 
 #--- Central Q Learning ---#
 env = gym.make("CatAndMouse-cat_entry")
 
-central_q_training(env, "cat_entry_wo_door", epochs=10000)
+central_q_training(env, "cat_entry", epochs=10000)
 
 env = gym.make("CatAndMouse-5050_entry")
 
-central_q_training(env, "5050_entry_wo_door", epochs=10000)
+central_q_training(env, "5050_entry", epochs=10000)
