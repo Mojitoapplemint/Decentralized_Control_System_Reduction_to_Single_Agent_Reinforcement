@@ -1,11 +1,8 @@
-import sys
-sys.path.insert(0, "C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Central Q Learning")
-
 import gymnasium as gym
 import numpy as np
 import pandas as pd
-import cam_env_cat_entry
 import cam_env_5050_entry
+import cam_env_cat_entry
 
 STATES = {(1,3):0,
           (1,4):1, 
@@ -37,20 +34,21 @@ CAT_STATES = {
 
 def get_joint_action(q_table, state, epsilon):
     if np.random.rand() < epsilon:
-        action = np.random.choice(4)
+        action = np.random.choice(2)
     else:
         action = np.argmax(q_table[state])
     return action
 
-def get_state_number(observation):
-    mouse_observation = MOUSE_STATES.get(observation)
-    cat_observation = CAT_STATES.get(observation)
-    
-    return mouse_observation*6 + cat_observation
+def get_cat_state_num(observation):
+    return CAT_STATES.get(observation)
 
-def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0.9, alpha = 0.9):
+def get_mouse_state_num(observation):
+    return MOUSE_STATES.get(observation)
 
-    q_table = np.zeros(shape=(36,4))
+def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0.9, alpha = 0.9):
+
+    q_cat = np.zeros(shape=(6,2))
+    q_mouse = np.zeros(shape=(6,2))
 
     terminated_count = [0,0,0,0,0]
     truncated_count = [0,0,0,0,0]
@@ -61,32 +59,36 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
 
         terminated = False
         truncated = False
-        
+
         observation, info = env.reset()
-        
-        new_state = get_state_number(observation)
-        
-        while (not terminated and not truncated):
-        
-            action = get_joint_action(q_table, new_state , epsilon)
-            
-            joint_action = (action//2, action%2)
-            
-            old_state = new_state
+        cat_state = get_cat_state_num(observation)
+        mouse_state = get_mouse_state_num(observation)
+
+        while not terminated and not truncated:
+            mouse_action = get_joint_action(q_mouse, mouse_state, epsilon)
+            cat_action = get_joint_action(q_cat, cat_state, epsilon)
+
+            joint_action = (mouse_action, cat_action)
             
             observation, reward, terminated, truncated, info = env.step(joint_action)
             
-            print(reward)
+            #print(reward)
             
-            new_state = get_state_number(observation)
-            
-            q_table[old_state, action] = q_table[old_state, action] + alpha*(reward + gamma*np.max(q_table[new_state]) - q_table[old_state, action])
+            next_mouse_state = get_mouse_state_num(observation)
+            next_cat_state = get_cat_state_num(observation)
+
+            q_mouse[mouse_state, mouse_action] = q_mouse[mouse_state, mouse_action] + alpha*(reward + gamma*np.max(q_mouse[next_mouse_state])-q_mouse[mouse_state, mouse_action])
+            q_cat[cat_state, cat_action] = q_cat[cat_state, cat_action] + alpha*(reward + gamma*np.max(q_cat[next_cat_state])-q_cat[cat_state, cat_action])
+
+            mouse_state = next_mouse_state
+            cat_state = next_cat_state
 
         if episode < epochs/5:
             if terminated:
                 terminated_count[0] += 1
             else:
                 truncated_count[0] += 1
+    
         elif episode < 2*epochs/5:
             if terminated:
                 terminated_count[1] += 1
@@ -116,16 +118,14 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
     for i in range(5):
         print(i*epochs/5,"~",(i+1)*epochs/5 , ":", truncated_count[i])
     
-    df = pd.DataFrame(q_table)
-    df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Central Q Learning/Exp3 joint observation/{model_name}.csv")
-
-
-
-#--- Central Q Learning ---#
-env = gym.make("CatAndMouse-cat_entry")
-
-central_q_training(env, "cat_entry_jo", epochs=10000)
-
+    q_mouse_df = pd.DataFrame(q_mouse)
+    q_cat_df = pd.DataFrame(q_cat)
+    
+    q_mouse_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/{model_name}_mouse.csv")
+    q_cat_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/{model_name}_cat.csv")
+    
 env = gym.make("CatAndMouse-5050_entry")
+independent_q_learning(env, "iql_5050_entry", epochs = 10000, epsilon=0.1, gamma = 0.95)
 
-central_q_training(env, "5050_entry_jo", epochs=10000)
+env = gym.make("CatAndMouse-cat_entry")
+independent_q_learning(env, "iql_cat_entry", epochs = 10000, epsilon=0.1, gamma = 0.95)
