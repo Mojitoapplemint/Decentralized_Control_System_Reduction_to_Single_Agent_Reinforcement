@@ -121,8 +121,8 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
     q_mouse_df = pd.DataFrame(q_mouse)
     q_cat_df = pd.DataFrame(q_cat)
     
-    q_mouse_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/{model_name}_mouse.csv")
-    q_cat_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/{model_name}_cat.csv")
+    q_mouse_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/Exp2 updated reward function/{model_name}_mouse.csv")
+    q_cat_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/Exp2 updated reward function/{model_name}_cat.csv")
     
 env = gym.make("CatAndMouse-5050_entry")
 independent_q_learning(env, "iql_5050_entry", epochs = 10000, epsilon=0.1, gamma = 0.95)
