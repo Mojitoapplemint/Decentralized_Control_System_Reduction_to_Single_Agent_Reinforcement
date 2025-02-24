@@ -68,25 +68,7 @@ class CatAndMouseEnv(gym.Env):
                 self.cat_position = 3
                 self.cat_room3 = True
             else:
-                self.cat_position +=1
-    
-    def move(self):
-        mouse_door = self.mouse_position_to_door()
-        cat_door = self.cat_position_to_door()
-        
-        if self.doors[mouse_door] == 1:
-            if self.mouse_position == 1:
-                self.mouse_position = 3
-                self.mouse_room3 = True
-            else:
-                self.mouse_position -=1
-        
-        if self.doors[cat_door] == 1:
-            if self.cat_position == 5:
-                self.cat_position = 3
-                self.cat_room3 = True
-            else:
-                self.cat_position +=1    
+                self.cat_position +=1 
         
     def reset(self, seed=None, options = None):
         """
@@ -143,10 +125,10 @@ class CatAndMouseEnv(gym.Env):
                     self.cat_room3 = False
                     self.mouse_room3 = False
                 
-                if self.training_count == 30:
-                    truncated = True
-                else:
-                    self.training_count += 1
+                    if self.training_count == 30:
+                        truncated = True
+                    else:
+                        self.training_count += 1
         else:
             self.mouse_move()
             if self.render_mode == "human":
@@ -167,10 +149,10 @@ class CatAndMouseEnv(gym.Env):
                     self.cat_room3 = False
                     self.mouse_room3 = False
                 
-                if self.training_count == 30:
-                    truncated = True
-                else:
-                    self.training_count += 1
+                    if self.training_count == 30:
+                        truncated = True
+                    else:
+                        self.training_count += 1
         
         
         cat_door = self.doors[self.cat_position_to_door()]

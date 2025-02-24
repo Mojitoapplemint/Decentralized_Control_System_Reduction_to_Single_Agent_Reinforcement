@@ -72,7 +72,7 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
             
             observation, reward, terminated, truncated, info = env.step(joint_action)
             
-            #print(reward)
+            # print(joint_action, reward)
             
             next_mouse_state = get_mouse_state_num(observation)
             next_cat_state = get_cat_state_num(observation)
@@ -83,6 +83,8 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
             mouse_state = next_mouse_state
             cat_state = next_cat_state
 
+        
+        
         if episode < epochs/5:
             if terminated:
                 terminated_count[0] += 1
@@ -125,7 +127,7 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
     q_cat_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/Exp2 updated reward function/{model_name}_cat.csv")
     
 env = gym.make("CatAndMouse-5050_entry")
-independent_q_learning(env, "iql_5050_entry", epochs = 10000, epsilon=0.1, gamma = 0.95)
+independent_q_learning(env, "iql_5050_entry", epochs = 1000, epsilon=0.1, gamma = 0.1, alpha = 0.9)
 
-env = gym.make("CatAndMouse-cat_entry")
-independent_q_learning(env, "iql_cat_entry", epochs = 10000, epsilon=0.1, gamma = 0.95)
+# env = gym.make("CatAndMouse-cat_entry")
+# independent_q_learning(env, "iql_cat_entry", epochs = 1000, epsilon=0.1, gamma = 0.3, alpha = 0.9)
