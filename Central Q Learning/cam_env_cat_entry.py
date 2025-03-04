@@ -124,10 +124,10 @@ class CatAndMouseEnv(gym.Env):
                 self.cat_room3 = False
                 self.mouse_room3 = False
             
-                if self.training_count == 30:
-                    truncated = True
-                else:
-                    self.training_count += 1
+        if self.training_count == 30 and not terminated:
+            truncated = True
+        else:
+            self.training_count += 1
         
         
         cat_door = self.doors[self.cat_position_to_door()]

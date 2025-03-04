@@ -125,7 +125,7 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
     q_cat_df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Independent Q Learning/Exp1 original reward function/{model_name}_cat.csv")
     
 env = gym.make("CatAndMouse-5050_entry")
-independent_q_learning(env, "iql_5050_entry", epochs = 10000, epsilon=0.1, gamma = 0.9)
+independent_q_learning(env, "iql_5050_entry", epochs = 100000, epsilon=0.1, gamma = 0.9)
 
 env = gym.make("CatAndMouse-cat_entry")
-independent_q_learning(env, "iql_cat_entry", epochs = 10000, epsilon=0.1, gamma = 0.8)
+independent_q_learning(env, "iql_cat_entry", epochs = 100000, epsilon=0.1, gamma = 0.9)

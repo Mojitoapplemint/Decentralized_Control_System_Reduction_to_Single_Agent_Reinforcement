@@ -54,39 +54,30 @@ class CatAndMouseEnv(gym.Env):
         mouse_door = self.mouse_position_to_door()
         
         if self.doors[mouse_door] == 1:
+            
             if self.mouse_position == 1:
                 self.mouse_position = 3
-                self.mouse_room3 = True
+                
             else:
                 self.mouse_position -=1
+
+            if self.mouse_position == 2:
+                self.mouse_room3 = True
         
     def cat_move(self):
         cat_door = self.cat_position_to_door()
         
         if self.doors[cat_door] == 1:
+
+    
             if self.cat_position == 5:
                 self.cat_position = 3
-                self.cat_room3 = True
             else:
                 self.cat_position +=1
-    
-    def move(self):
-        mouse_door = self.mouse_position_to_door()
-        cat_door = self.cat_position_to_door()
-        
-        if self.doors[mouse_door] == 1:
-            if self.mouse_position == 1:
-                self.mouse_position = 3
-                self.mouse_room3 = True
-            else:
-                self.mouse_position -=1
-        
-        if self.doors[cat_door] == 1:
-            if self.cat_position == 5:
-                self.cat_position = 3
+            
+            if self.cat_position == 4:
                 self.cat_room3 = True
-            else:
-                self.cat_position +=1    
+ 
         
     def reset(self, seed=None, options = None):
         """
@@ -126,6 +117,7 @@ class CatAndMouseEnv(gym.Env):
         self.cat_move()
         if self.render_mode == "human":
             self.render("Cat")
+        
         if self.cat_position == 3 and self.mouse_position==3:
             reward = -10
             terminated = True
@@ -138,7 +130,7 @@ class CatAndMouseEnv(gym.Env):
                 reward = -10
                 terminated = True
             elif self.cat_room3 and self.mouse_room3:
-                reward = 100
+                reward = 10    
                 self.cat_room3 = False
                 self.mouse_room3 = False
             

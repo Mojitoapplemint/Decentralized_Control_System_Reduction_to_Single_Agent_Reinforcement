@@ -76,8 +76,6 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
             
             observation, reward, terminated, truncated, info = env.step(joint_action)
             
-            print(reward)
-            
             new_state = get_state_number(observation)
             
             q_table[old_state, action] = q_table[old_state, action] + alpha*(reward + gamma*np.max(q_table[new_state]) - q_table[old_state, action])
