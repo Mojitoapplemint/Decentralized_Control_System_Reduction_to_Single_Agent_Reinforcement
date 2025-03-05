@@ -135,10 +135,10 @@ class CatAndMouseEnv(gym.Env):
                 self.render("Mouse")
             
             if self.cat_position == 3 and self.mouse_position==3:
-                reward = -10
+                reward = -100
                 terminated = True
             elif self.cat_room3 and self.mouse_room3:
-                reward = 100
+                reward = 10
                 self.cat_room3 = False
                 self.mouse_room3 = False
             

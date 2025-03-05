@@ -54,6 +54,7 @@ class CatAndMouseEnv(gym.Env):
         mouse_door = self.mouse_position_to_door()
         
         if self.doors[mouse_door] == 1:
+            self.mouse_moved = True
             if self.mouse_position == 1:
                 self.mouse_position = 3
                 self.mouse_room3 = True
@@ -64,29 +65,12 @@ class CatAndMouseEnv(gym.Env):
         cat_door = self.cat_position_to_door()
         
         if self.doors[cat_door] == 1:
+            self.cat_moved = True
             if self.cat_position == 5:
                 self.cat_position = 3
                 self.cat_room3 = True
             else:
-                self.cat_position +=1
-    
-    def move(self):
-        mouse_door = self.mouse_position_to_door()
-        cat_door = self.cat_position_to_door()
-        
-        if self.doors[mouse_door] == 1:
-            if self.mouse_position == 1:
-                self.mouse_position = 3
-                self.mouse_room3 = True
-            else:
-                self.mouse_position -=1
-        
-        if self.doors[cat_door] == 1:
-            if self.cat_position == 5:
-                self.cat_position = 3
-                self.cat_room3 = True
-            else:
-                self.cat_position +=1    
+                self.cat_position +=1 
         
     def reset(self, seed=None, options = None):
         """
@@ -99,6 +83,9 @@ class CatAndMouseEnv(gym.Env):
         self.mouse_position = 2
         self.cat_room3 = False;
         self.mouse_room3 = False;
+        
+        self.cat_moved = False
+        self.mouse_moved = False
         self.doors = {"m1":1,
                       "m2":1,
                       "m3":1,
@@ -134,14 +121,21 @@ class CatAndMouseEnv(gym.Env):
                 self.mouse_move()
                 if self.render_mode == "human":
                     self.render("Mouse")
+                    
+                if self.cat_room3 and self.mouse_moved:
+                    reward += 10
+                    self.cat_room3 = False
+                
+                if self.mouse_room3 and self.cat_moved:
+                    reward += 10
+                    self.mouse_room3 = False
                 
                 if self.cat_position == 3 and self.mouse_position==3:
                     reward = -100
                     terminated = True
-                elif self.cat_room3 and self.mouse_room3:
-                    reward = 10
-                    self.cat_room3 = False
-                    self.mouse_room3 = False
+                
+                self.mouse_moved = False
+                self.cat_moved = False
         else:
             self.mouse_move()
             if self.render_mode == "human":
@@ -153,14 +147,21 @@ class CatAndMouseEnv(gym.Env):
                 self.cat_move()
                 if self.render_mode == "human":
                     self.render("Cat")
+                    
+                if self.cat_room3 and self.mouse_moved:
+                    reward += 10
+                    self.cat_room3 = False
+                
+                if self.mouse_room3 and self.cat_moved:
+                    reward += 10
+                    self.mouse_room3 = False
                 
                 if self.cat_position == 3 and self.mouse_position==3:
                     reward = -100
                     terminated = True
-                elif self.cat_room3 and self.mouse_room3:
-                    reward = 10
-                    self.cat_room3 = False
-                    self.mouse_room3 = False
+                
+                self.mouse_moved = False
+                self.cat_moved = False
                 
         if self.training_count == 30 and not terminated:
             truncated = True
