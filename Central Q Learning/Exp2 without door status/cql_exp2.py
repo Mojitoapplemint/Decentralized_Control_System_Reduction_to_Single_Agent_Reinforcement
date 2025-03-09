@@ -34,9 +34,6 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
 
     q_table = np.zeros(shape=(9,4))
 
-    terminated_count = [0,0,0,0,0]
-    truncated_count = [0,0,0,0,0]
-
     for episode in range(epochs):
         if (episode%100==0):
             print(str(100*episode/epochs)+"%","done" , end="\r")
@@ -64,40 +61,6 @@ def central_q_training(env, model_name, epochs = 10000, epsilon = 0.1, gamma = 0
             new_state = get_state_number(observation, doors)
             
             q_table[old_state, action] = q_table[old_state, action] + alpha*(reward + gamma*np.max(q_table[new_state]) - q_table[old_state, action])
-
-        if episode < epochs/5:
-            if terminated:
-                terminated_count[0] += 1
-            else:
-                truncated_count[0] += 1
-        elif episode < 2*epochs/5:
-            if terminated:
-                terminated_count[1] += 1
-            else:
-                truncated_count[1] += 1
-        elif episode < 3*epochs/5:
-            if terminated:
-                terminated_count[2] += 1
-            else:
-                truncated_count[2] += 1
-        elif episode < 4*epochs/5:
-            if terminated:
-                terminated_count[3] += 1
-            else:
-                truncated_count[3] += 1
-        else:
-            if terminated:
-                terminated_count[4] += 1
-            else:
-                truncated_count[4] += 1
-    
-    print("Terminated counts")
-    for i in range(5):
-        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", terminated_count[i])
-        
-    print("Truncated counts")
-    for i in range(5):
-        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", truncated_count[i])
     
     df = pd.DataFrame(q_table)
     df.to_csv(f"C:/Users/woong/Desktop/COMP_SCI/Reinforement Learning/Cat and Mouse/Central Q Learning/Exp2 without door status/{model_name}.csv")

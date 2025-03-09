@@ -50,9 +50,6 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
     q_cat = np.zeros(shape=(6,2))
     q_mouse = np.zeros(shape=(6,2))
 
-    terminated_count = [0,0,0,0,0]
-    truncated_count = [0,0,0,0,0]
-
     for episode in range(epochs):
         if (episode%100==0):
             print(str(100*episode/epochs)+"%","done" , end="\r")
@@ -82,41 +79,6 @@ def independent_q_learning(env, model_name, epochs = 10000, epsilon = 0.1, gamma
 
             mouse_state = next_mouse_state
             cat_state = next_cat_state
-
-        if episode < epochs/5:
-            if terminated:
-                terminated_count[0] += 1
-            else:
-                truncated_count[0] += 1
-    
-        elif episode < 2*epochs/5:
-            if terminated:
-                terminated_count[1] += 1
-            else:
-                truncated_count[1] += 1
-        elif episode < 3*epochs/5:
-            if terminated:
-                terminated_count[2] += 1
-            else:
-                truncated_count[2] += 1
-        elif episode < 4*epochs/5:
-            if terminated:
-                terminated_count[3] += 1
-            else:
-                truncated_count[3] += 1
-        else:
-            if terminated:
-                terminated_count[4] += 1
-            else:
-                truncated_count[4] += 1
-    
-    print("Terminated counts")
-    for i in range(5):
-        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", terminated_count[i])
-        
-    print("Truncated counts")
-    for i in range(5):
-        print(i*epochs/5,"~",(i+1)*epochs/5 , ":", truncated_count[i])
     
     q_mouse_df = pd.DataFrame(q_mouse)
     q_cat_df = pd.DataFrame(q_cat)
