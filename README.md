@@ -86,25 +86,6 @@ jupyter notebook
 
 [Update this tree if there are more files or subfolders.]
 
-## Thesis Information
-
-- Author: Dylan Kim
-- Advisor: [Add advisor name]
-- Institution: [Add institution]
-- Date: [Add date or year]
-
-## Citation
-
-If you use this work, please cite:
-
-[Add citation in your preferred format]
 
 ## License
-
-[Add license here, or write “All rights reserved” if no license is intended.]
-
-## Notes
-
-- [Add any data availability note here.]
-- [Add any implementation details here.]
-- [Add any known limitations here.]
+All rights reserved
