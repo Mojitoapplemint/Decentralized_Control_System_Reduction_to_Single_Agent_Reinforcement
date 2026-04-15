@@ -1,24 +1,11 @@
 # Decentralized Control System Reduction to Single-Agent Reinforcement Learning
 
-[Add a 1–2 sentence project summary here.]
-
 ## Overview
-
-This repository contains the code and supplementary materials for an honors thesis on reducing a decentralized, partially observable control problem to a single-agent reinforcement learning formulation. The thesis compares Central Q-Learning (CQL) and Independent Q-Learning (IQL) on a cat-and-mouse maze benchmark under different observability and reward settings.
+One widely studied approach to decentralized partially observable systems is based on Reinforcement Learning (RL). As the RL algorithm also gets generalized as a Multi-agent RL, training the model to converge to the solution becomes more unstable due to inherent limitations of the system, such as Non-stationarity. Hence, a way to reduce a multi-agent system into a single-agent system using ordinary single-agent RL has been proposed. This paper aims to apply two reduction algorithms to a decentralized system where multiple agents collaborate to find the solution and analyze the performance by comparing the two algorithms via implementation and simulation. 
 
 ## Research Goal
 
 The project investigates whether a decentralized system with partial observability can be solved effectively by reducing it to a single-agent reinforcement learning problem, and how that compares with independent learning in the same environment.
-
-## Repository Contents
-
-This repository currently contains:
-
-- `Central Q Learning/` — materials for the central-learning experiments
-- `Independent Q Learning/` — materials for the independent-learning experiments
-- `Decentralized_Control_System_Reduction_to_Single_Agent_Reinforcement.pdf` — the full thesis manuscript
-
-[Add any additional folders or files here if the repository is expanded later.]
 
 ## Method Summary
 
@@ -33,7 +20,7 @@ The experiments are based on a cat-and-mouse maze system with partial observabil
 
 The thesis reports four experiments:
 
-1. CQL with partial observation
+1. CQL with partial observation()
 2. CQL with full observation
 3. IQL with the default reward system
 4. IQL with an updated reward system
@@ -44,48 +31,14 @@ The thesis reports four experiments:
 
 The thesis reports that CQL converged more stably in the small benchmark, while IQL was more affected by partial observability and non-stationarity. The updated reward design improved IQL performance, but convergence was still not guaranteed.
 
-## How to Reproduce
 
-### Requirements
+## Requirements
 
-- Python [version]
-- Jupyter Notebook [version]
-- gymnasium
-- [Add any other dependencies here]
+- python==3.12.10
+- pandas==2.2.2
+- numpy==1.26.4
+- matplotlib==3.9.0
+- gymnasium==0.29.1
 
-### Setup
-
-```bash
-pip install -r requirements.txt
-```
-
-[Add the correct environment setup steps here if a requirements file does not exist.]
-
-### Run
-
-[Add the exact notebook or script name here.]
-
-```bash
-python [main_script.py]
-```
-
-or
-
-```bash
-jupyter notebook
-```
-
-## Repository Structure
-
-```text
-.
-├── Central Q Learning/
-├── Independent Q Learning/
-└── Decentralized_Control_System_Reduction_to_Single_Agent_Reinforcement.pdf
-```
-
-[Update this tree if there are more files or subfolders.]
-
-
-## License
+# License
 All rights reserved
